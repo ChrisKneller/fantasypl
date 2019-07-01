@@ -24,9 +24,14 @@ class Player():
         self.last_name = self.data['player_last_name']
         self.team_name = self.data['name']
         self.leagues = [] # TODO: LOOP OVER LEAGUES AND GET LIST
+            # leagues = leagues.data['leagues']
+            # classic_leagues = leagues['classic']
+            # h2h_leagues = leagues['h2h']
         self.region = self.data['player_region_name']
         self.gw_points = self.data['summary_event_points']
         self.gw_rank = self.data['summary_event_rank']
         self.total_points = self.data['summary_overall_points']
         self.total_rank = self.data['summary_overall_rank']
     
+
+# TODO: define League class and use it in above self.leagues definition
