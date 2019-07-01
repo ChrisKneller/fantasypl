@@ -2,6 +2,20 @@ import requests
 import json
 from pprint import pprint
 
+'''
+List of all known API urls
+
+
+https://fantasy.premierleague.com/api/entry/{player_id}/
+https://fantasy.premierleague.com/api/entry/{player_id}/history/
+https://fantasy.premierleague.com/api/my-team/{player_id}/
+https://fantasy.premierleague.com/api/fixtures/
+https://fantasy.premierleague.com/api/fixtures/?event={gameweek}
+https://fantasy.premierleague.com/api/leagues-classic/{classic_league_id}/standings/?page_new_entries={page}&page_standings={GAMEWEEK? #TODO: FIND OUT WHAT THIS IS}
+https://fantasy.premierleague.com/api/me/
+https://fantasy.premierleague.com/api/bootstrap-static/
+'''
+
 base_url = 'https://fantasy.premierleague.com/api'
 
 
@@ -13,11 +27,11 @@ def get_player_details(player_id):
     return webdata
 
 
-# input league
+# input league id; output league details
 
 
 class Player():
-    # a player object based on the player's id
+    # a Player object based on the Player's id
 
     def __init__(self, id):
 
@@ -53,3 +67,10 @@ class Player():
         return h2h_leagues
 
 # TODO: define League class and use it in above self.leagues definition
+
+class League():
+    # a League object based on the League's id
+
+    def __init__(self, id):
+
+        self.id = id
