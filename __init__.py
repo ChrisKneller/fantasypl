@@ -1,2 +1,2 @@
 # from .file import function
-from .read import get_player_details, Player
+from .read import *
