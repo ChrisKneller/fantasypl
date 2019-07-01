@@ -36,11 +36,20 @@ class Player():
         self.total_points = self.data['summary_overall_points']
         self.total_rank = self.data['summary_overall_rank']
 
+    # return a list of classic league ids that the Player is a part of
     def classic_leagues(self):
         classic_leagues = []
         leagues_data = self.data['leagues']['classic']
         for league in leagues_data:
             classic_leagues.append(league['id'])
         return classic_leagues
+
+    # return a list of h2h league ids that the Player is a part of
+    def h2h_leagues(self):
+        h2h_leagues = []
+        leagues_data = self.data['leagues']['h2h']
+        for league in leagues_data:
+            h2h_leagues.append(league['id'])
+        return h2h_leagues
 
 # TODO: define League class and use it in above self.leagues definition
