@@ -98,7 +98,7 @@ class League():
 
         self.id = id
 
-
+# TODO: expand for fixtures
 class Gameweek():
     # a Gameweek object containing data for each gameweek
 
@@ -117,7 +117,7 @@ class Gameweek():
         self.highest_scoring_entry = self.data['highest_scoring_entry']
         self.finished = self.data['finished']
         self.data_checked = self.data['data_checked']
-
+        # self.fixtures = 
 
 # TODO: expand class
 class Team():
