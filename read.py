@@ -6,18 +6,17 @@ from time import struct_time, gmtime, strftime
 '''
 List of all known API urls
 
-
 https://fantasy.premierleague.com/api/entry/{player_id}/
 https://fantasy.premierleague.com/api/entry/{player_id}/history/
 https://fantasy.premierleague.com/api/fixtures/
 https://fantasy.premierleague.com/api/fixtures/?event={gameweek}
 https://fantasy.premierleague.com/api/leagues-classic/{classic_league_id}/standings/?page_new_entries={page}&page_standings={GAMEWEEK? #TODO: FIND OUT WHAT THIS IS}
 https://fantasy.premierleague.com/api/bootstrap-static/
+https://fantasy.premierleague.com/api/element-summary/{player_id}/
 
 Login required:
 https://fantasy.premierleague.com/api/my-team/{player_id}/
 https://fantasy.premierleague.com/api/me/
-
 
 '''
 
@@ -36,7 +35,7 @@ def get_player_details(player_id):
 
 
 # get all details
-# dict_keys(['events', 'game_settings', 'phases', 'teams', 'total_players', 'elements', 'element_stats', 'element_types'])
+# dict_keys(['events', 'game_settings', 'phases', 'teams', 'total_players', 'elements' (footballers), 'element_stats', 'element_types'])
 def get_all_details():
     r = requests.get(f'{base_url}/bootstrap-static/')
     webdata = json.loads(r.text)
@@ -99,7 +98,7 @@ class League():
 
         self.id = id
 
-# TODO: expand definition of class
+
 class Gameweek():
     # a Gameweek object containing data for each gameweek
 
@@ -110,5 +109,29 @@ class Gameweek():
         self.deadline = self.data['deadline_time']
         self.deadline_epoch = self.data['deadline_time_epoch']
         self.deadline_verbose = strftime('%H:%M %Z on %A %d %B %Y',gmtime(self.data['deadline_time_epoch']))
+        self.is_next = self.data['is_next']
+        self.is_current = self.data['is_current']
+        self.is_previous = self.data['is_previous']
+        self.average_score = self.data['average_entry_score']
+        self.highest_score = self.data['highest_score']
+        self.highest_scoring_entry = self.data['highest_scoring_entry']
+        self.finished = self.data['finished']
+        self.data_checked = self.data['data_checked']
 
-# TODO: define some other classes ?!
+
+# TODO: expand class
+class Team():
+    # a Team object containing data for the corresponding premier league team
+    
+    def __init__(self, team_number):
+        self.id = team_number
+        self.name = 'xyz' # TODO
+
+
+# TODO: expand class
+class Footballer():
+    # a Footballer object containing data for the corresponding football player
+
+    def __init__(self, id):
+        self.id = id
+        self.first_name = 'placeholder'
