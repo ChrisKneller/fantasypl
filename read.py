@@ -1,6 +1,7 @@
 import requests
 import json
 from pprint import pprint
+from time import struct_time, gmtime, strftime
 
 '''
 List of all known API urls
@@ -67,10 +68,6 @@ class Player():
         self.first_name = self.data['player_first_name']
         self.last_name = self.data['player_last_name']
         self.team_name = self.data['name']
-        self.leagues = [] # TODO: LOOP OVER LEAGUES AND GET LIST
-            # leagues = leagues.data['leagues']
-            # classic_leagues = leagues['classic']
-            # h2h_leagues = leagues['h2h']
         self.region = self.data['player_region_name']
         self.gw_points = self.data['summary_event_points']
         self.gw_rank = self.data['summary_event_rank']
@@ -110,6 +107,8 @@ class Gameweek():
 
         self.number = gameweek_number
         self.data = get_gameweek_details(gameweek_number)
-
+        self.deadline = self.data['deadline_time']
+        self.deadline_epoch = self.data['deadline_time_epoch']
+        self.deadline_verbose = strftime('%H:%M %Z on %A %d %B %Y',gmtime(self.data['deadline_time_epoch']))
 
 # TODO: define some other classes ?!
