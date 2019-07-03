@@ -40,7 +40,7 @@ class FPL():
         if not email and not password:
             email = os.environ.get("FPL_EMAIL")
             password = os.environ.get("FPL_PASSWORD")
-        
+
         if not email or not password:
                 raise ValueError("Login requires an email and password")
 
@@ -62,9 +62,16 @@ class FPL():
         return webdata
 
 
+    def get_player_details(self, player_id):
+        return Player(player_id, session=self.session)
+
+
 # input player id (e.g. 68762); output player details
-def get_player_details(player_id):
-    r = requests.get(f'{base_url}/entry/{player_id}/')
+def get_player_details(player_id, session=None):
+    if not session:
+        r = requests.get(f'{base_url}/entry/{player_id}/')
+    else:
+        r = session.get(f'{base_url}/entry/{player_id}/')
     webdata = json.loads(r.text)
     # webdata = pprint(webdata)
     return webdata
@@ -99,10 +106,11 @@ def get_all_team_details():
 class Player():
     # a Player object based on the Player's id
 
-    def __init__(self, id):
+    def __init__(self, id, session):
 
         self.id = id
-        self.data = get_player_details(id)
+        self.session = session
+        self.data = get_player_details(id, session=session)
         self.first_name = self.data['player_first_name']
         self.last_name = self.data['player_last_name']
         self.team_name = self.data['name']
@@ -111,6 +119,14 @@ class Player():
         self.gw_rank = self.data['summary_event_rank']
         self.total_points = self.data['summary_overall_points']
         self.total_rank = self.data['summary_overall_rank']
+
+
+    def __repr__(self):
+        return f'{self.first_name} {self.last_name} - {self.team_name}'
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name} - {self.team_name}'
+
 
     # return a list of classic league ids that the Player is a part of
     def classic_leagues(self):
@@ -157,13 +173,13 @@ class Gameweek():
         self.highest_scoring_entry = self.data['highest_scoring_entry']
         self.finished = self.data['finished']
         self.data_checked = self.data['data_checked']
-        # self.fixtures = 
+        # self.fixtures =
 
 
 # TODO: expand class
 class Team():
     # a Team object containing data for the corresponding premier league team
-    
+
     def __init__(self, team_number):
         self.id = team_number
         self.name = 'xyz' # TODO
