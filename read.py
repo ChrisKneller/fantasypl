@@ -6,21 +6,26 @@ from time import struct_time, gmtime, strftime
 '''
 List of all known API urls
 
-https://fantasy.premierleague.com/api/entry/{player_id}/
-https://fantasy.premierleague.com/api/entry/{player_id}/history/
-https://fantasy.premierleague.com/api/fixtures/
-https://fantasy.premierleague.com/api/fixtures/?event={gameweek}
-https://fantasy.premierleague.com/api/leagues-classic/{classic_league_id}/standings/?page_new_entries={page}&page_standings={GAMEWEEK? #TODO: FIND OUT WHAT THIS IS}
-https://fantasy.premierleague.com/api/bootstrap-static/
-https://fantasy.premierleague.com/api/element-summary/{player_id}/
+* /bootstrap-static/
+* /entry/{player_id}/
+* /entry/{player_id}/history/
+* /fixtures/
+* /fixtures/?event={gameweek}
+* /element-summary/{player_id}/
+* /leagues-classic/{classic_league_id}/standings/?page_new_entries={page}&page_standings={GAMEWEEK? #TODO: FIND OUT WHAT THIS IS}
+
 
 Login required:
-https://fantasy.premierleague.com/api/my-team/{player_id}/
-https://fantasy.premierleague.com/api/me/
+* /my-team/{player_id}/
+* /me/
 
 '''
 
 base_url = 'https://fantasy.premierleague.com/api'
+
+
+# TODO: in order to use any of these functions, create a master Class that begins the session
+# and sends all requests in that one session
 
 
 # input player id (e.g. 68762); output player details
