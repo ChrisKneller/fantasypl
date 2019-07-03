@@ -2,6 +2,7 @@ import requests
 import json
 from pprint import pprint
 from time import struct_time, gmtime, strftime
+import os
 
 '''
 List of all known API urls
@@ -26,6 +27,39 @@ base_url = 'https://fantasy.premierleague.com/api'
 
 # TODO: in order to use any of these functions, create a master Class that begins the session
 # and sends all requests in that one session
+
+
+class FPL():
+    # A Class for storing the session and wrapping around all functions
+
+    def __init__(self):
+        self.session = requests.session()
+
+    def login(self, email=None, password=None):
+        # log the user in so more capabilities are opened up
+        if not email and not password:
+            email = os.environ.get("FPL_EMAIL")
+            password = os.environ.get("FPL_PASSWORD")
+        
+        if not email or not password:
+                raise ValueError("Login requires an email and password")
+
+        login_url = "https://users.premierleague.com/accounts/login/"
+
+        payload = {
+            "login": email,
+            "password": password,
+            "redirect_uri": "https://fantasy.premierleague.com/a/login",
+            "app": "plfpl-web",
+        }
+
+        with self.session.post(login_url, data=payload) as response:
+            print(response)
+
+    def get_my_details(self):
+        r = self.session.get(f'{base_url}/me/')
+        webdata = json.loads(r.text)
+        return webdata
 
 
 # input player id (e.g. 68762); output player details
@@ -94,14 +128,15 @@ class Player():
             h2h_leagues.append(league['id'])
         return h2h_leagues
 
-# TODO: define League class properly
 
+# TODO: define League class properly
 class League():
     # a League object based on the League's id
 
     def __init__(self, id):
 
         self.id = id
+
 
 # TODO: expand for fixtures
 class Gameweek():
@@ -123,6 +158,7 @@ class Gameweek():
         self.finished = self.data['finished']
         self.data_checked = self.data['data_checked']
         # self.fixtures = 
+
 
 # TODO: expand class
 class Team():
