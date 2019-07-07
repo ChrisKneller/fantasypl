@@ -54,7 +54,7 @@ class FPL():
         }
 
         with self.session.post(login_url, data=payload) as response:
-            print(response)
+            return response
 
     def get_my_details(self):
         r = self.session.get(f'{base_url}/me/')

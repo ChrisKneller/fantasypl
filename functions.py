@@ -1,6 +1,6 @@
 import requests
 import json
-from classes import Player
+# from classes import Player
 
 # This file is intended to contain all standalone functions that can be
 # optionally run without being in a session.

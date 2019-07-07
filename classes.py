@@ -1,18 +1,18 @@
 class Player():
-    # a Player object based on the Player's id
+    # A Player object based on the Player's id
 
     def __init__(self, data):
 
         self.data = data
-        self.id = self.data['id']
-        self.first_name = self.data['player_first_name']
-        self.last_name = self.data['player_last_name']
-        self.team_name = self.data['name']
-        self.region = self.data['player_region_name']
-        self.gw_points = self.data['summary_event_points']
-        self.gw_rank = self.data['summary_event_rank']
-        self.total_points = self.data['summary_overall_points']
-        self.total_rank = self.data['summary_overall_rank']
+        self.id = data['id']
+        self.first_name = data['player_first_name']
+        self.last_name = data['player_last_name']
+        self.team_name = data['name']
+        self.region = data['player_region_name']
+        self.gw_points = data['summary_event_points']
+        self.gw_rank = data['summary_event_rank']
+        self.total_points = data['summary_overall_points']
+        self.total_rank = data['summary_overall_rank']
 
 
     def __repr__(self):
