@@ -1,9 +1,10 @@
 class Player():
-    # A Player object based on the Player's id
+    # A Player class based on the Player's id
 
-    def __init__(self, data):
+    def __init__(self, data, session):
 
         self.data = data
+        self.session = session
         self.id = data['id']
         self.first_name = data['player_first_name']
         self.last_name = data['player_last_name']
@@ -37,3 +38,19 @@ class Player():
         for league in leagues_data:
             h2h_leagues.append(league['id'])
         return h2h_leagues
+
+
+class ClassicLeague():
+    # A class based on a classic league
+
+    def __init__(self, data, session):
+        self.data = data
+        self.session = session
+        self.id = data['league']['id']
+        self.name = data['league']['name']
+
+    def __repr__(self):
+        return f'{self.name}'
+
+    def __str__(self):
+        return f'{self.name}'
