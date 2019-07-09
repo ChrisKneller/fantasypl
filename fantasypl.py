@@ -10,6 +10,12 @@ class FPL():
 
     def __init__(self):
         self.session = requests.session()
+        self.is_logged_in = False
+        self.User = None
+
+    
+    def __enter__(self):
+        return self
 
     def login(self, email=None, password=None):
         # log the user in so more capabilities are opened up
@@ -30,7 +36,16 @@ class FPL():
         }
 
         with self.session.post(login_url, data=payload) as response:
-            return response
+            if response.status_code == 200:
+                print('Status code 200 aw yiss')
+                player = self.get_my_details()['player']
+                if player:
+                    self.is_logged_in = True
+                    self.User = self.get_user(player['entry'])
+                    print(f'Successfully logged in: {self.User}')
+                else:
+                    print('Invalid login details. Please try again.')
+        return
 
     def get_my_details(self):
         r = self.session.get(f'{API_BASE_URL}/me/')

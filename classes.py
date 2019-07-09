@@ -26,7 +26,7 @@ class User():
         return f'{self.first_name} {self.last_name} - {self.team_name}'
 
 
-    def classic_leagues(self):
+    def get_classic_leagues(self):
         # return a list of classic league ids that the User is a part of
         classic_leagues = []
         leagues_data = self.data['leagues']['classic']
@@ -34,7 +34,7 @@ class User():
             classic_leagues.append(league['id'])
         return classic_leagues
 
-    def h2h_leagues(self):
+    def get_h2h_leagues(self):
         # return a list of h2h league ids that the User is a part of
         h2h_leagues = []
         leagues_data = self.data['leagues']['h2h']
@@ -48,7 +48,25 @@ class User():
         query = API_URLS['user_history'].format(self.id)
         r = self.session.get(query)
         webdata = json.loads(r.text)
-        return webdata
+        return webdata['current']
+
+    
+    def get_season_history(self):
+        # return a user's full season scoring history
+        query = API_URLS['user_history'].format(self.id)
+        r = self.session.get(query)
+        webdata = json.loads(r.text)
+        return webdata['past']
+
+    # TODO: define methods for (getting) cup, picks, team and transfers
+
+
+    def get_team(self):
+        # return a logged in users current team
+        query = API_URLS['user_team'].format(self.id)
+        r = self.session.get(query)
+        webdata = json.loads(r.text)
+        return webdata['picks']
 
 
 class ClassicLeague():
