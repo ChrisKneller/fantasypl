@@ -2,7 +2,7 @@ import requests
 import json
 import os
 
-from .classes import Player, ClassicLeague
+from .classes import User, ClassicLeague
 from .endpoints import API_BASE_URL, API_URLS
 
 class FPL():
@@ -38,12 +38,12 @@ class FPL():
         return webdata
 
 
-    def get_player(self, player_id):
+    def get_user(self, player_id):
         # Input a player ID (e.g. 68762), output the Player class containing all of their information
         query = f'{API_BASE_URL}/entry/{player_id}/'
         r = self.session.get(query)
         webdata = json.loads(r.text)
-        return Player(webdata, self.session)
+        return User(webdata, self.session)
 
 
     def get_classicleague(self, league_id):

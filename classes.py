@@ -1,5 +1,8 @@
-class Player():
-    # A Player class based on the Player's id
+from .endpoints import API_BASE_URL, API_URLS
+import json
+
+class User():
+    # A User class based on the User's id
 
     def __init__(self, data, session):
 
@@ -23,21 +26,29 @@ class Player():
         return f'{self.first_name} {self.last_name} - {self.team_name}'
 
 
-    # return a list of classic league ids that the Player is a part of
     def classic_leagues(self):
+        # return a list of classic league ids that the User is a part of
         classic_leagues = []
         leagues_data = self.data['leagues']['classic']
         for league in leagues_data:
             classic_leagues.append(league['id'])
         return classic_leagues
 
-    # return a list of h2h league ids that the Player is a part of
     def h2h_leagues(self):
+        # return a list of h2h league ids that the User is a part of
         h2h_leagues = []
         leagues_data = self.data['leagues']['h2h']
         for league in leagues_data:
             h2h_leagues.append(league['id'])
         return h2h_leagues
+
+
+    def get_gameweek_history(self):
+        # return a user's full gameweek scoring history
+        query = API_URLS['user_history'].format(self.id)
+        r = self.session.get(query)
+        webdata = json.loads(r.text)
+        return webdata
 
 
 class ClassicLeague():
