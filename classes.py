@@ -58,11 +58,11 @@ class User():
         webdata = json.loads(r.text)
         return webdata['past']
 
-    # TODO: define methods for (getting) cup, picks, team and transfers
+    # TODO: define methods for (getting) cup, picks and transfers
 
 
     def get_team(self):
-        # return a logged in users current team
+        # return a logged in user's current team
         query = API_URLS['user_team'].format(self.id)
         r = self.session.get(query)
         webdata = json.loads(r.text)
@@ -83,3 +83,6 @@ class ClassicLeague():
 
     def __str__(self):
         return f'{self.name}'
+
+
+# TODO: define Player (Footballer) class for readability when returning a user's team
