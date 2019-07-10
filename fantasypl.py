@@ -82,3 +82,11 @@ class FPL():
         for team in teamdetails:
             teams.append(PLTeam(team, self.session))
         return teams
+
+
+    def get_plplayers(self):
+        playerdetails = self.get_staticdata()['elements']
+        # players = []
+        # for player in playerdetails:
+        #     players.append(PLPlayer(player, self.session))
+        return playerdetails

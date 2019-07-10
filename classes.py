@@ -85,8 +85,6 @@ class ClassicLeague():
         return f'{self.name}'
 
 
-# TODO: define Player (Footballer) class for readability when returning a user's team
-
 class PLTeam():
     # A class for the premier league teams (Arsenal, Aston Villa etc.)
 
@@ -106,3 +104,60 @@ class PLTeam():
 
     def __str__(self):
         return f'{self.name}'
+
+# TODO: define Player (Footballer) class for readability when returning a user's team
+
+# Example data for a Player:
+#  {'assists': 1,
+#   'bonus': 3,
+#   'bps': 156,
+#   'chance_of_playing_next_round': None,
+#   'chance_of_playing_this_round': None,
+#   'clean_sheets': 1,
+#   'code': 166324,
+#   'cost_change_event': 0,
+#   'cost_change_event_fall': 0,
+#   'cost_change_start': 0,
+#   'cost_change_start_fall': 0,
+#   'creativity': '313.6',
+#   'dreamteam_count': 0,
+#   'element_type': 3,
+#   'ep_next': None,
+#   'ep_this': None,
+#   'event_points': 0,
+#   'first_name': 'Ivan',
+#   'form': '0.0',
+#   'goals_conceded': 11,
+#   'goals_scored': 3,
+#   'ict_index': '66.0',
+#   'id': 419,
+#   'in_dreamteam': False,
+#   'influence': '198.0',
+#   'minutes': 677,
+#   'news': '',
+#   'news_added': None,
+#   'now_cost': 50,
+#   'own_goals': 0,
+#   'penalties_missed': 0,
+#   'penalties_saved': 0,
+#   'photo': '166324.jpg',
+#   'points_per_game': '2.1',
+#   'red_cards': 0,
+#   'saves': 0,
+#   'second_name': 'Cavaleiro',
+#   'selected_by_percent': '0.1',
+#   'special': False,
+#   'squad_number': None,
+#   'status': 'a',
+#   'team': 20,
+#   'team_code': 39,
+#   'threat': '156.0',
+#   'total_points': 48,
+#   'transfers_in': 0,
+#   'transfers_in_event': 0,
+#   'transfers_out': 0,
+#   'transfers_out_event': 0,
+#   'value_form': '0.0',
+#   'value_season': '0.0',
+#   'web_name': 'Cavaleiro',
+#   'yellow_cards': 1},
