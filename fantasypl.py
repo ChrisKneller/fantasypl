@@ -2,7 +2,7 @@ import requests
 import json
 import os
 
-from .classes import User, ClassicLeague
+from .classes import User, ClassicLeague, PLTeam
 from .endpoints import API_BASE_URL, API_URLS
 
 class FPL():
@@ -67,3 +67,18 @@ class FPL():
         r = self.session.get(query)
         webdata = json.loads(r.text)
         return ClassicLeague(webdata, self.session)
+
+
+    def get_staticdata(self):
+        query = API_URLS['static']
+        r = self.session.get(query)
+        webdata = json.loads(r.text)
+        return webdata
+
+    
+    def get_plteams(self):
+        teamdetails = self.get_staticdata()['teams']
+        teams = []
+        for team in teamdetails:
+            teams.append(PLTeam(team, self.session))
+        return teams

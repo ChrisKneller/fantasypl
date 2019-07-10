@@ -58,8 +58,6 @@ class User():
         webdata = json.loads(r.text)
         return webdata['past']
 
-    # TODO: define methods for (getting) cup, picks and transfers
-
 
     def get_team(self):
         # return a logged in user's current team
@@ -67,6 +65,8 @@ class User():
         r = self.session.get(query)
         webdata = json.loads(r.text)
         return webdata['picks']
+
+    # TODO: define methods for (getting) cup, picks and transfers
 
 
 class ClassicLeague():
@@ -86,3 +86,23 @@ class ClassicLeague():
 
 
 # TODO: define Player (Footballer) class for readability when returning a user's team
+
+class PLTeam():
+    # A class for the premier league teams (Arsenal, Aston Villa etc.)
+
+    def __init__(self, data, session):
+        self.data = data
+        self.session = session
+        self.id = data['id']
+        self.name = data['name']
+        self.shortname = data['short_name']
+        self.strength = data['strength']
+        self.formkeys = ['strength_overall_home', 'strength_attack_home', 'strength_defence_home',
+                         'strength_overall_away', 'strength_attack_away', 'strength_defence_away']
+        self.form = {key:self.data[key] for key in self.formkeys if key in self.data}
+
+    def __repr__(self):
+        return f'{self.name}'
+
+    def __str__(self):
+        return f'{self.name}'
