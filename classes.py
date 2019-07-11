@@ -107,6 +107,23 @@ class PLTeam():
 
 # TODO: define Player (Footballer) class for readability when returning a user's team
 
+
+Class Footballer():
+    # A class for the premier league footballers
+
+    positions = {1: 'Goalkeeper',
+                 2: 'Defender',
+                 3: 'Midfielder',
+                 4: 'Forward'}
+
+    def __init__(self, data, session):
+        self.data = data
+        self.session = session
+        self.id = data['id']
+        self.position = positions[data['element_type']
+        self.first_name = data['first_name']
+        self.last_name = data['last_name']
+
 # Example data for a Player:
 #  {'assists': 1,
 #   'bonus': 3,
@@ -121,7 +138,7 @@ class PLTeam():
 #   'cost_change_start_fall': 0,
 #   'creativity': '313.6',
 #   'dreamteam_count': 0,
-#   'element_type': 3,
+#   'element_type':3,
 #   'ep_next': None,
 #   'ep_this': None,
 #   'event_points': 0,
