@@ -1,4 +1,5 @@
 from .endpoints import API_BASE_URL, API_URLS
+from .functions import position_id_to_str
 import json
 
 class User():
@@ -108,21 +109,24 @@ class PLTeam():
 # TODO: define Player (Footballer) class for readability when returning a user's team
 
 
-Class Footballer():
+class Footballer():
     # A class for the premier league footballers
-
-    positions = {1: 'Goalkeeper',
-                 2: 'Defender',
-                 3: 'Midfielder',
-                 4: 'Forward'}
 
     def __init__(self, data, session):
         self.data = data
         self.session = session
         self.id = data['id']
-        self.position = positions[data['element_type']
-        self.first_name = data['first_name']
-        self.last_name = data['last_name']
+        self.position_id = data['element_type']
+        self.position = position_id_to_str(self.position_id)
+        self.first_name = data['first_name'] if data['first_name'] else None
+        self.last_name = data['second_name'] if data['second_name'] else None
+        self.name = data['web_name']
+
+    def __repr__(self):
+        return f'{self.name}'
+
+    def __str__(self):
+        return f'{self.name}'
 
 # Example data for a Player:
 #  {'assists': 1,

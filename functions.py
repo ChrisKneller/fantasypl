@@ -40,3 +40,12 @@ def get_gameweek_details(gameweek_number):
 # get all team details
 def get_all_team_details():
     return get_all_details()['teams']
+
+
+
+def position_id_to_str(id_no):
+    positions = {1: 'Goalkeeper',
+                2: 'Defender',
+                3: 'Midfielder',
+                4: 'Forward'}
+    return positions[id_no]

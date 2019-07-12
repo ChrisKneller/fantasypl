@@ -2,7 +2,7 @@ import requests
 import json
 import os
 
-from .classes import User, ClassicLeague, PLTeam
+from .classes import User, ClassicLeague, PLTeam, Footballer
 from .endpoints import API_BASE_URL, API_URLS
 
 class FPL():
@@ -89,4 +89,9 @@ class FPL():
         # players = []
         # for player in playerdetails:
         #     players.append(PLPlayer(player, self.session))
-        return playerdetails
+        players = []
+        for player in playerdetails:
+            new_player = Footballer(player, self.session)
+            players.append(new_player)
+            # print(new_player)
+        return players
