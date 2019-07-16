@@ -49,3 +49,27 @@ def position_id_to_str(id_no):
                 3: 'Midfielder',
                 4: 'Forward'}
     return positions[id_no]
+
+
+def team_id_to_str(id_no):
+    teams = {1: 'Arsenal',
+             2: 'Aston Villa',
+             3: 'Bournemouth',
+             4: 'Brighton',
+             5: 'Burnley',
+             6: 'Chelsea',
+             7: 'Crystal Palace',
+             8: 'Everton',
+             9: 'Leicester',
+             10: 'Liverpool',
+             11: 'Man City',
+             12: 'Man Utd',
+             13: 'Newcastle',
+             14: 'Norwich',
+             15: 'Sheffield Utd',
+             16: 'Southampton',
+             17: 'Spurs',
+             18: 'Watford',
+             19: 'West Ham',
+             20: 'Wolves',}
+    return teams[id_no]

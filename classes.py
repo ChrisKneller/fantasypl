@@ -1,5 +1,5 @@
 from .endpoints import API_BASE_URL, API_URLS
-from .functions import position_id_to_str
+from .functions import position_id_to_str, team_id_to_str
 import json
 
 class User():
@@ -96,9 +96,9 @@ class PLTeam():
         self.name = data['name']
         self.shortname = data['short_name']
         self.strength = data['strength']
-        self.formkeys = ['strength_overall_home', 'strength_attack_home', 'strength_defence_home',
-                         'strength_overall_away', 'strength_attack_away', 'strength_defence_away']
-        self.form = {key:self.data[key] for key in self.formkeys if key in self.data}
+        formkeys = ['strength_overall_home', 'strength_attack_home', 'strength_defence_home',
+                    'strength_overall_away', 'strength_attack_away', 'strength_defence_away']
+        self.form = {key:self.data[key] for key in formkeys if key in self.data}
 
     def __repr__(self):
         return f'{self.name}'
@@ -121,6 +121,8 @@ class Footballer():
         self.first_name = data['first_name'] if data['first_name'] else None
         self.last_name = data['second_name'] if data['second_name'] else None
         self.name = data['web_name']
+        self.team_id = data['team']
+        self.team = team_id_to_str(self.team_id)
 
     def __repr__(self):
         return f'{self.name}'
