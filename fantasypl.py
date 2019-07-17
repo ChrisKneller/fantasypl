@@ -24,7 +24,7 @@ class FPL():
             password = os.environ.get("FPL_PASSWORD")
 
         if not email or not password:
-                raise ValueError("Login requires an email and password")
+            raise ValueError("Login requires an email and password")
 
         login_url = "https://users.premierleague.com/accounts/login/"
 

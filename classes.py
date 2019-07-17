@@ -19,6 +19,7 @@ class User():
         self.gw_rank = data['summary_event_rank']
         self.total_points = data['summary_overall_points']
         self.total_rank = data['summary_overall_rank']
+        self.current_even = data['current_event']
 
 
     def __repr__(self):
@@ -71,8 +72,36 @@ class User():
     # TODO: define methods for (getting) cup, picks and transfers
 
 
-    # def transfer(self, players_out, players_in, max_hit=12, wildcard=False):
-    #     if
+    def transfer(self, players_out, players_in, max_hit=12, wildcard=False):
+        if not self.is_logged_in:
+            raise Exception("User is not logged in")
+
+        if not players_out or not players_in:
+            raise Exception("You must transfer at least one player in and one player out")
+
+        if len(players_out) != len(players_in):
+            raise Exception("You must transfer the same amount of players in and out")
+
+    payload = {
+        "confirmed": False, # start with confirmed as False to test for errors on FPL end
+        "entry": self.id,
+        "event": (self.current_event + 1) if self.current_event else 1, # current event i.e. gw is False if season hasn't started
+        "transfers": [],
+        "wildcard": wildcard,
+        "freehit": False
+        }
+
+    headers = {
+        "Content-Type": "application/json; charset=UTF-8",
+        "X-Requested-With": "XMLHttpRequest",
+        "Referer": "https://fantasy.premierleague.com/a/squad/transfers"
+    }
+
+    trasnfer_url = 'xyz'
+
+    with self.session.post(transfer_url, data=payload, headers=headers) as response:
+        if response.status_code == 200:
+            print('Status code 200 aw yiss')
 
 class ClassicLeague():
     # A class based on a classic league
