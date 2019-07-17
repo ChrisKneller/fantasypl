@@ -5,10 +5,11 @@ import json
 class User():
     # A User class based on the User's id
 
-    def __init__(self, data, session):
+    def __init__(self, data, session, logging_in=False):
 
         self.data = data
         self.session = session
+        self.is_logged_in = False if not logging_in else True
         self.id = data['id']
         self.first_name = data['player_first_name']
         self.last_name = data['player_last_name']
@@ -69,6 +70,9 @@ class User():
 
     # TODO: define methods for (getting) cup, picks and transfers
 
+
+    # def transfer(self, players_out, players_in, max_hit=12, wildcard=False):
+    #     if
 
 class ClassicLeague():
     # A class based on a classic league

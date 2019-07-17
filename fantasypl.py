@@ -41,7 +41,7 @@ class FPL():
                 player = self.get_my_details()['player']
                 if player:
                     self.is_logged_in = True
-                    self.User = self.get_user(player['entry'])
+                    self.User = self.get_user(player['entry'], logging_in=True)
                     print(f'Successfully logged in: {self.User}')
                 else:
                     print('Invalid login details. Please try again.')
@@ -53,12 +53,12 @@ class FPL():
         return webdata
 
 
-    def get_user(self, player_id):
+    def get_user(self, player_id, logging_in=False):
         # Input a player ID (e.g. 68762), output the Player class containing all of their information
         query = f'{API_BASE_URL}/entry/{player_id}/'
         r = self.session.get(query)
         webdata = json.loads(r.text)
-        return User(webdata, self.session)
+        return User(webdata, self.session, logging_in)
 
 
     def get_classicleague(self, league_id):
