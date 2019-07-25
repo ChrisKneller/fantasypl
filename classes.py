@@ -19,7 +19,7 @@ class User():
         self.gw_rank = data['summary_event_rank']
         self.total_points = data['summary_overall_points']
         self.total_rank = data['summary_overall_rank']
-        self.current_even = data['current_event']
+        self.current_event = data['current_event']
 
 
     def __repr__(self):
@@ -72,6 +72,33 @@ class User():
     # TODO: define methods for (getting) cup, picks and transfers
 
 
+
+    def get_transfer_payload(self, players_out, players_in, user_team, players, wildcard):
+        # returns the payload needed to make the requested transfers
+        payload = {
+            "chip": None,
+            # "confirmed": False, # start with confirmed as False to test for errors on FPL end
+            "entry": self.id,
+            "event": (self.current_event + 1) if self.current_event else 1, # current event i.e. gw is False if season hasn't started
+            "transfers": [],
+            # "wildcard": wildcard,
+            # "freehit": False
+            }
+
+        for player_out_id, player_in_id in zip(players_out, players_in):
+            player_out = next(player for player in user_team
+                            if player["element"] == player_out_id)
+            player_in = next(player for player in players
+                            if player["id"] == player_in_id)
+            payload["transfers"].append({
+                "element_in": player_in["id"],
+                "element_out": player_out["element"],
+                "purchase_price": player_in["now_cost"],
+                "selling_price": player_out["selling_price"]
+        })
+
+        return payload
+
     def transfer(self, players_out, players_in, max_hit=12, wildcard=False):
         if not self.is_logged_in:
             raise Exception("User is not logged in")
@@ -82,26 +109,32 @@ class User():
         if len(players_out) != len(players_in):
             raise Exception("You must transfer the same amount of players in and out")
 
-    payload = {
-        "confirmed": False, # start with confirmed as False to test for errors on FPL end
-        "entry": self.id,
-        "event": (self.current_event + 1) if self.current_event else 1, # current event i.e. gw is False if season hasn't started
-        "transfers": [],
-        "wildcard": wildcard,
-        "freehit": False
+        team = self.get_team()
+
+        players_query = API_URLS['static']
+        players_r = self.session.get(players_query)
+        players = json.loads(players_r.text)['elements']
+
+        # players = json.loads(self.session.get(API_URLS['players']).text)
+
+        headers = {
+            "Host": "fantasy.premierleague.com",
+            "Content-Type": "application/json",
+            # "X-Requested-With": "XMLHttpRequest",
+            "Origin": "https://fantasy.premierleague.com",
+            "Referer": "https://fantasy.premierleague.com/transfers",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
+            "X-CSRFToken": self.session.cookies.get('csrftoken', domain='fantasy.premierleague.com')
         }
 
-    headers = {
-        "Content-Type": "application/json; charset=UTF-8",
-        "X-Requested-With": "XMLHttpRequest",
-        "Referer": "https://fantasy.premierleague.com/a/squad/transfers"
-    }
+        payload = self.get_transfer_payload(players_out, players_in, team, players, wildcard)
 
-    trasnfer_url = 'xyz'
+        transfer_url = API_URLS["transfers"]
 
-    with self.session.post(transfer_url, data=payload, headers=headers) as response:
-        if response.status_code == 200:
-            print('Status code 200 aw yiss')
+        with self.session.post(transfer_url, data=json.dumps(payload), headers=headers) as response:
+            if response.status_code == 200:
+                print('Status code 200 aw yiss')
+            return response
 
 class ClassicLeague():
     # A class based on a classic league
