@@ -37,6 +37,7 @@ class User():
             classic_leagues.append(league['id'])
         return classic_leagues
 
+
     def get_h2h_leagues(self):
         # return a list of h2h league ids that the User is a part of
         h2h_leagues = []

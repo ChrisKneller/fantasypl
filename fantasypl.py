@@ -12,6 +12,8 @@ class FPL():
         self.session = requests.session()
         self.is_logged_in = False
         self.User = None
+        self.players = None
+        self.teams = None
 
     
     def __enter__(self):
@@ -77,19 +79,27 @@ class FPL():
 
     
     def get_plteams(self):
+        if self.teams:
+            print("You already have the teams m8")
+            return self.teams
         teamdetails = self.get_staticdata()['teams']
         teams = []
         for team in teamdetails:
             teams.append(PLTeam(team, self.session))
+        self.teams = teams
         return teams
 
 
     def get_plplayers(self):
+        if self.players:
+            print("You already have the players m8")
+            return self.players
         playerdetails = self.get_staticdata()['elements']
         players = []
         for player in playerdetails:
             new_player = Footballer(player, self.session)
             players.append(new_player)
+        self.players = players
         return players
 
     def get_plplayer_by_id(self, players, id):
@@ -97,5 +107,10 @@ class FPL():
 
     def get_plplayer_by_name(self, name, players=False):
         if not players:
-            players = self.get_plplayers()
+            if not self.players:
+                players = self.get_plplayers()
+                print("Getting players")
+            else:
+                players = self.players
+                print("Using players already getted")
         return next(player for player in players if player.name == name)
