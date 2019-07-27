@@ -86,18 +86,16 @@ class FPL():
 
     def get_plplayers(self):
         playerdetails = self.get_staticdata()['elements']
-        # players = []
-        # for player in playerdetails:
-        #     players.append(PLPlayer(player, self.session))
         players = []
         for player in playerdetails:
             new_player = Footballer(player, self.session)
             players.append(new_player)
-            # print(new_player)
         return players
 
     def get_plplayer_by_id(self, players, id):
         return next(player for player in players if player.id == id)
 
-    def get_plplayer_by_name(self, players, name):
+    def get_plplayer_by_name(self, name, players=False):
+        if not players:
+            players = self.get_plplayers()
         return next(player for player in players if player.name == name)

@@ -69,15 +69,14 @@ class User():
         webdata = json.loads(r.text)
         return webdata['picks']
 
-    # TODO: define methods for (getting) cup, picks and transfers
+    # TODO: define methods for (getting) cup
 
 
-
+    # TODO: add wildcard transfers functionality
     def get_transfer_payload(self, players_out, players_in, user_team, players, wildcard):
         # returns the payload needed to make the requested transfers
         payload = {
             "chip": None,
-            # "confirmed": False, # start with confirmed as False to test for errors on FPL end
             "entry": self.id,
             "event": (self.current_event + 1) if self.current_event else 1, # current event i.e. gw is False if season hasn't started
             "transfers": [],
@@ -99,7 +98,11 @@ class User():
 
         return payload
 
+
     def transfer(self, players_out, players_in, max_hit=12, wildcard=False):
+        # method for making transfers for the logged in player
+        
+        # cover various error cases
         if not self.is_logged_in:
             raise Exception("User is not logged in")
 
@@ -109,26 +112,28 @@ class User():
         if len(players_out) != len(players_in):
             raise Exception("You must transfer the same amount of players in and out")
 
+        # get the player's own team
         team = self.get_team()
 
+        # get the list of all players
         players_query = API_URLS['static']
         players_r = self.session.get(players_query)
         players = json.loads(players_r.text)['elements']
 
-        # players = json.loads(self.session.get(API_URLS['players']).text)
-
+        # these headers have been tested and are working as of gameweek 0 in season 19/20
         headers = {
             "Host": "fantasy.premierleague.com",
             "Content-Type": "application/json",
-            # "X-Requested-With": "XMLHttpRequest",
             "Origin": "https://fantasy.premierleague.com",
             "Referer": "https://fantasy.premierleague.com/transfers",
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
             "X-CSRFToken": self.session.cookies.get('csrftoken', domain='fantasy.premierleague.com')
         }
 
+        # get the payload to send with the post request
         payload = self.get_transfer_payload(players_out, players_in, team, players, wildcard)
 
+        # get the transfer URL for the post request
         transfer_url = API_URLS["transfers"]
 
         with self.session.post(transfer_url, data=json.dumps(payload), headers=headers) as response:
