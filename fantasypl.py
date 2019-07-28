@@ -9,12 +9,13 @@ from .functions import get_headers
 class FPL():
     # A Class for storing the session and wrapping around all functions
 
-    def __init__(self):
+    def __init__(self, proxies=None):
         self.session = requests.session()
         self.is_logged_in = False
         self.User = None
         self.players = None
         self.teams = None
+        self.proxies = proxies
 
     
     def __enter__(self):
@@ -40,7 +41,7 @@ class FPL():
 
         headers = get_headers(login=True)
 
-        response = self.session.post(login_url, data=payload, headers=headers)
+        response = self.session.post(login_url, data=payload, headers=headers, proxies=self.proxies)
         if response.status_code == 200:
             print('Status code 200 aw yiss')
             player = self.get_my_details()['player']

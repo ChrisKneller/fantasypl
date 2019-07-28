@@ -84,11 +84,15 @@ def get_classicleague(league_id, session=False):
     return ClassicLeague(webdata, session)
 
 
-def fetch(query, session=False):
-    r = session.get(query) if session else requests.get(query)
+def fetch(query, session=False, proxies=None):
+    r = session.get(query, proxies=proxies) if session else requests.get(query, proxies=proxies)
     webdata = json.loads(r.text)
     return webdata
 
+
+def post(query, session=False, payload=None, headers=None, proxies=None):
+    r = session.post(query, data=payload, headers=headers, proxies=proxies) if session else request.post(query, data=payload, headers=headers, proxies=proxies)
+    return response
 
 def get_headers(referer='https://fantasy.premierleague.com/', login=False):
     if login:
