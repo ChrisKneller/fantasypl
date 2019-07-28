@@ -4,6 +4,7 @@ import os
 
 from .classes import User, ClassicLeague, PLTeam, Footballer
 from .endpoints import API_BASE_URL, API_URLS
+from .functions import get_headers
 
 class FPL():
     # A Class for storing the session and wrapping around all functions
@@ -37,17 +38,19 @@ class FPL():
             "app": "plfpl-web",
         }
 
-        with self.session.post(login_url, data=payload) as response:
-            if response.status_code == 200:
-                print('Status code 200 aw yiss')
-                player = self.get_my_details()['player']
-                if player:
-                    self.is_logged_in = True
-                    self.User = self.get_user(player['entry'], logging_in=True)
-                    print(f'Successfully logged in: {self.User}')
-                else:
-                    print('Invalid login details. Please try again.')
-        return
+        headers = get_headers(login=True)
+
+        response = self.session.post(login_url, data=payload, headers=headers)
+        if response.status_code == 200:
+            print('Status code 200 aw yiss')
+            player = self.get_my_details()['player']
+            if player:
+                self.is_logged_in = True
+                self.User = self.get_user(player['entry'], logging_in=True)
+                print(f'Successfully logged in: {self.User}')
+            else:
+                print('Invalid login details. Please try again.')
+        return response
 
     def get_my_details(self):
         r = self.session.get(f'{API_BASE_URL}/me/')

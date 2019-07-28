@@ -88,3 +88,25 @@ def fetch(query, session=False):
     r = session.get(query) if session else requests.get(query)
     webdata = json.loads(r.text)
     return webdata
+
+
+def get_headers(referer='https://fantasy.premierleague.com/', login=False):
+    if login:
+        headers = {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+            # "Host": "fantasy.premierleague.com",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Origin": "https://fantasy.premierleague.com",
+            "Referer": referer,
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
+        }
+    else:
+        headers = {
+            "Host": "fantasy.premierleague.com",
+            "Content-Type": "application/json",
+            "Origin": "https://fantasy.premierleague.com",
+            "Referer": referer,
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
+            "X-CSRFToken": self.session.cookies.get('csrftoken', domain='fantasy.premierleague.com')
+        }
+    return headers
