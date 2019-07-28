@@ -54,7 +54,7 @@ class FPL():
         return response
 
     def get_my_details(self):
-        r = self.session.get(f'{API_BASE_URL}/me/')
+        r = self.session.get(f'{API_BASE_URL}/me/', proxies=proxies)
         webdata = json.loads(r.text)
         return webdata
 
