@@ -9,6 +9,9 @@ API_URLS = {
     "h2h": "{}leagues-entries-and-h2h-matches/league/{{}}?page={{}}".format(
         API_BASE_URL),
     "league_classic": "{}leagues-classic/{{}}/standings/".format(API_BASE_URL),
+    "league_classic_create": "{}leagues-classic/".format(API_BASE_URL),
+    "league_delete": "{}leagues-private/delete/".format(API_BASE_URL),
+    "league_join": "{}leagues-private/join/".format(API_BASE_URL),
     "league_h2h": "{}leagues-h2h/{{}}/standings/".format(API_BASE_URL),
     "players": "{}elements".format(API_BASE_URL), # NOT IN USE AS OF 25/7/19
     "player": "{}element-summary/{{}}".format(API_BASE_URL),

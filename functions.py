@@ -1,5 +1,7 @@
 import requests
 import json
+from .endpoints import API_URLS, API_BASE_URL
+# from .classes import ClassicLeague
 # from classes import Player
 
 # This file is intended to contain all standalone functions that can be
@@ -42,7 +44,6 @@ def get_all_team_details():
     return get_all_details()['teams']
 
 
-
 def position_id_to_str(id_no):
     positions = {1: 'Goalkeeper',
                 2: 'Defender',
@@ -73,3 +74,17 @@ def team_id_to_str(id_no):
              19: 'West Ham',
              20: 'Wolves',}
     return teams[id_no]
+
+
+def get_classicleague(league_id, session=False):
+    # Input a classic league ID, output the ClassicLeague class containing its information
+    query = API_URLS['league_classic'].format(league_id)
+    r = session.get(query) if session else requests.get(query)
+    webdata = json.loads(r.text)
+    return ClassicLeague(webdata, session)
+
+
+def fetch(query, session=False):
+    r = session.get(query) if session else requests.get(query)
+    webdata = json.loads(r.text)
+    return webdata

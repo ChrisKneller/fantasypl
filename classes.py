@@ -1,5 +1,5 @@
 from .endpoints import API_BASE_URL, API_URLS
-from .functions import position_id_to_str, team_id_to_str
+from .functions import fetch, position_id_to_str, team_id_to_str, get_classicleague
 import json
 
 class User():
@@ -100,6 +100,19 @@ class User():
         return payload
 
 
+    def get_headers(self, referer):
+    # get the appropriate headers for making a request
+        headers = {
+            "Host": "fantasy.premierleague.com",
+            "Content-Type": "application/json",
+            "Origin": "https://fantasy.premierleague.com",
+            "Referer": referer,
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
+            "X-CSRFToken": self.session.cookies.get('csrftoken', domain='fantasy.premierleague.com')
+        }
+        return headers
+
+
     def transfer(self, players_out, players_in, max_hit=12, wildcard=False):
         # method for making transfers for the logged in player
         
@@ -121,15 +134,15 @@ class User():
         players_r = self.session.get(players_query)
         players = json.loads(players_r.text)['elements']
 
-        # these headers have been tested and are working as of gameweek 0 in season 19/20
-        headers = {
-            "Host": "fantasy.premierleague.com",
-            "Content-Type": "application/json",
-            "Origin": "https://fantasy.premierleague.com",
-            "Referer": "https://fantasy.premierleague.com/transfers",
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
-            "X-CSRFToken": self.session.cookies.get('csrftoken', domain='fantasy.premierleague.com')
-        }
+        headers = self.get_headers("https://fantasy.premierleague.com/transfers")
+        # {
+        #     "Host": "fantasy.premierleague.com",
+        #     "Content-Type": "application/json",
+        #     "Origin": "https://fantasy.premierleague.com",
+        #     "Referer": "https://fantasy.premierleague.com/transfers",
+        #     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
+        #     "X-CSRFToken": self.session.cookies.get('csrftoken', domain='fantasy.premierleague.com')
+        # }
 
         # get the payload to send with the post request
         payload = self.get_transfer_payload(players_out, players_in, team, players, wildcard)
@@ -142,14 +155,58 @@ class User():
                 print('Status code 200 aw yiss')
             return response
 
+    def create_classic_league(self, name, start_gameweek=1):
+        headers = self.get_headers('https://fantasy.premierleague.com/leagues/create/classic')
+        payload = {
+                    'name': name,
+                    'start_event': start_gameweek
+                  }
+        request_url = API_URLS["league_classic_create"]
+
+        with self.session.post(request_url, data=json.dumps(payload), headers=headers) as response:
+            if response.status_code == 201:
+                print('Status code 201 (created) aw yiss')
+                try:
+                    data = json.loads(response.text)
+                    return ClassicLeague(data['id'], self.session)
+                except Exception as e:
+                    print(f'{e}: {response.text}')
+            return response
+
+    
+    def delete_league(self, league_id):
+        headers = self.get_headers(f'https://fantasy.premierleague.com/leagues/{league_id}/admin/c')
+        payload = {
+                    'league': league_id
+                  }
+        request_url = API_URLS["league_delete"]
+
+        with self.session.post(request_url, data=json.dumps(payload), headers=headers) as response:
+            if response.status_code == 204:
+                print('Status code 204 (no content) aw yiss')
+            return response
+
+    # 3iorvl
+    def join_league(self, league_code):
+        headers = self.get_headers('https://fantasy.premierleague.com/leagues/join/private')
+        payload = {
+                    'code': league_code
+                  }
+        request_url = API_URLS["league_join"]
+
+        with self.session.post(request_url, data=json.dumps(payload), headers=headers) as response:
+            if response.status_code == 200:
+                print('Status code 200 aw yiss')
+            return response
+
 class ClassicLeague():
     # A class based on a classic league
 
-    def __init__(self, data, session):
-        self.data = data
+    def __init__(self, id, session):
         self.session = session
-        self.id = data['league']['id']
-        self.name = data['league']['name']
+        self.id = id
+        self.data = fetch(API_URLS['league_classic'].format(id), session=self.session)
+        self.name = self.data['league']['name']
 
     def __repr__(self):
         return f'{self.name}'
@@ -195,6 +252,11 @@ class Footballer():
         self.name = data['web_name']
         self.team_id = data['team']
         self.team = team_id_to_str(self.team_id)
+        self.cost = data['now_cost']
+        self.points = {
+                       'gamweweek': data['event_points'], 
+                       'total': data['total_points']
+                      }
 
     def __repr__(self):
         return f'{self.name}'
