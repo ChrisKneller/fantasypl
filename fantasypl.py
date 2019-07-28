@@ -54,7 +54,7 @@ class FPL():
         return response
 
     def get_my_details(self):
-        r = self.session.get(f'{API_BASE_URL}/me/', proxies=proxies)
+        r = self.session.get(f'{API_BASE_URL}/me/', proxies=self.proxies)
         webdata = json.loads(r.text)
         return webdata
 
@@ -62,7 +62,7 @@ class FPL():
     def get_user(self, player_id, logging_in=False):
         # Input a player ID (e.g. 68762), output the Player class containing all of their information
         query = f'{API_BASE_URL}/entry/{player_id}/'
-        r = self.session.get(query)
+        r = self.session.get(query, proxies=self.proxies)
         webdata = json.loads(r.text)
         return User(webdata, self.session, logging_in)
 
