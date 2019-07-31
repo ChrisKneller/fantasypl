@@ -86,6 +86,10 @@ def get_classicleague(league_id, session=False):
 
 def fetch(query, session=False, proxies=None):
     r = session.get(query, proxies=proxies) if session else requests.get(query, proxies=proxies)
+    # print(r.status_code)
+    # print(r.text)
+    # print(r.reason)
+    # print(r.request.url)
     webdata = json.loads(r.text)
     return webdata
 

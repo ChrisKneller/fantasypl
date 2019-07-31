@@ -6,9 +6,10 @@ API_URLS = {
     "gameweeks": "{}events".format(API_BASE_URL),
     "gameweek_fixtures": "{}fixtures/?event={{}}".format(API_BASE_URL),
     "gameweek_live": "{}event/{{}}/live".format(API_BASE_URL),
-    "h2h": "{}leagues-entries-and-h2h-matches/league/{{}}?page={{}}".format(
-        API_BASE_URL),
+    "h2h": "{}leagues-entries-and-h2h-matches/league/{{}}?page={{}}".format(API_BASE_URL),
     "league_classic": "{}leagues-classic/{{}}/standings/".format(API_BASE_URL),
+    "league_classic_new": "{}leagues-classic/{{league}}/standings/?page_new_entries={{page}}&page_standings=1".format(API_BASE_URL),
+    "league_classic_standings": "{}leagues-classic/{{league}}/standings/?page_new_entries=1&page_standings={{page}}".format(API_BASE_URL),
     "league_classic_create": "{}leagues-classic/".format(API_BASE_URL),
     "league_delete": "{}leagues-private/delete/".format(API_BASE_URL),
     "league_join": "{}leagues-private/join/".format(API_BASE_URL),

@@ -69,10 +69,10 @@ class FPL():
 
     def get_classicleague(self, league_id):
         # Input a classic league ID, output the ClassicLeague class containing its information
-        query = API_URLS['league_classic'].format(league_id)
-        r = self.session.get(query)
-        webdata = json.loads(r.text)
-        return ClassicLeague(webdata, self.session)
+        # query = API_URLS['league_classic'].format(league_id)
+        # r = self.session.get(query)
+        # webdata = json.loads(r.text)
+        return ClassicLeague(league_id, self.session)
 
 
     def get_staticdata(self):

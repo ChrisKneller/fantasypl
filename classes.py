@@ -207,6 +207,10 @@ class ClassicLeague():
         self.id = id
         self.data = fetch(API_URLS['league_classic'].format(id), session=self.session)
         self.name = self.data['league']['name']
+        self.type = self.data['league']['scoring']
+        self.new_entries = self.get_newentries(initiate=True)
+        self.standings = self.get_standings(initiate=True)
+
 
     def __repr__(self):
         return f'{self.name}'
@@ -214,6 +218,45 @@ class ClassicLeague():
     def __str__(self):
         return f'{self.name}'
 
+    def get_newentries(self, initiate=False, pages=5):
+        if initiate:
+            new_entries_list = []
+            for page in range(1,pages+1):
+                data = fetch(API_URLS['league_classic_new'].format(league=self.id, page=page), session=self.session)
+                new_entries = data['new_entries']['results']
+                new_entries_list.append(new_entries)
+                if not data['new_entries']['has_next']:
+                    return new_entries_list
+            return new_entries_list
+        else:
+            new_entries_list = self.new_entries
+            for page in range(len(new_entries_list)+1,len(new_entries_list)+6):
+                data = fetch(API_URLS['league_classic_new'].format(league=self.id, page=page), session=self.session)
+                new_entries = data['new_entries']['results']
+                new_entries_list.append(new_entries)
+                if not data['new_entries']['has_next']:
+                    return new_entries_list
+            return new_entries_list
+
+    def get_standings(self, initiate=False, pages=5):
+        if initiate:
+            standings_list = []
+            for page in range(1,pages+1):
+                data = fetch(API_URLS['league_classic_standings'].format(league=self.id, page=page), session=self.session)
+                standings = data['standings']['results']
+                standings_list.append(standings)
+                if not data['standings']['has_next']:
+                    return standings_list
+            return standings_list
+        else:
+            standings_list = self.standings
+            for page in range(len(standings_list)+1,len(standings_list)+6):
+                data = fetch(API_URLS['league_classic_standings'].format(league=self.id, page=page), session=self.session)
+                standings = data['standings']['results']
+                standings_list.append(standings)
+                if not data['standings']['has_next']:
+                    return standings_list
+            return standings_list
 
 class PLTeam():
     # A class for the premier league teams (Arsenal, Aston Villa etc.)
