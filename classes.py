@@ -34,7 +34,7 @@ class User():
         classic_leagues = []
         leagues_data = self.data['leagues']['classic']
         for league in leagues_data:
-            classic_leagues.append(league['id'])
+            classic_leagues.append(ClassicLeague(league['id'],self.session,fulldata=False))
         return classic_leagues
 
 
@@ -202,14 +202,15 @@ class User():
 class ClassicLeague():
     # A class based on a classic league
 
-    def __init__(self, id, session):
+    def __init__(self, id, session, fulldata=True):
         self.session = session
         self.id = id
         self.data = fetch(API_URLS['league_classic'].format(id), session=self.session)
         self.name = self.data['league']['name']
-        self.type = self.data['league']['scoring']
-        self.new_entries = self.get_newentries(initiate=True)
-        self.standings = self.get_standings(initiate=True)
+        self.scoring = self.data['league']['scoring']
+        self.type = 'Global' if self.data['league']['league_type'] == 's' else 'Private' if self.data['league']['league_type'] == 'x' else 'Other' 
+        self.new_entries = self.get_newentries(initiate=True) if fulldata else None
+        self.standings = self.get_standings(initiate=True) if fulldata else None
 
 
     def __repr__(self):
