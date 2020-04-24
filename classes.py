@@ -3,8 +3,9 @@ from .functions import fetch, position_id_to_str, team_id_to_str, get_classiclea
 import json
 
 class User():
-    # A User class based on the User's id
-
+    '''
+    A User class based on the User's id
+    '''
     def __init__(self, data, session, logging_in=False):
 
         self.data = data
@@ -30,7 +31,10 @@ class User():
 
 
     def get_classic_leagues(self):
-        # return a list of classic league ids that the User is a part of
+        '''
+        Return a list of classic league ids that the User is a part of
+        '''
+
         classic_leagues = []
         leagues_data = self.data['leagues']['classic']
         for league in leagues_data:
@@ -39,7 +43,9 @@ class User():
 
 
     def get_h2h_leagues(self):
-        # return a list of h2h league ids that the User is a part of
+        '''
+        Return a list of h2h league ids that the User is a part of
+        '''
         h2h_leagues = []
         leagues_data = self.data['leagues']['h2h']
         for league in leagues_data:
@@ -48,7 +54,9 @@ class User():
 
 
     def get_gameweek_history(self):
-        # return a user's full gameweek scoring history
+        '''
+        Return the User's full gameweek scoring history
+        '''
         query = API_URLS['user_history'].format(self.id)
         r = self.session.get(query)
         webdata = json.loads(r.text)
@@ -56,7 +64,9 @@ class User():
 
     
     def get_season_history(self):
-        # return a user's full season scoring history
+        '''
+        Return the User's full season scoring history
+        '''
         query = API_URLS['user_history'].format(self.id)
         r = self.session.get(query)
         webdata = json.loads(r.text)
@@ -64,7 +74,10 @@ class User():
 
 
     def get_team(self):
-        # return a logged in user's current team
+        '''
+        Return a logged in User's current team
+        '''
+        assert self.is_logged_in, "You must be logged in as a user to see their current team"
         query = API_URLS['user_team'].format(self.id)
         r = self.session.get(query)
         webdata = json.loads(r.text)
@@ -75,7 +88,9 @@ class User():
 
     # TODO: add wildcard transfers functionality
     def get_transfer_payload(self, players_out, players_in, user_team, players, wildcard):
-        # returns the payload needed to make the requested transfers
+        '''
+        Returns the payload needed to make the requested transfers
+        '''
         payload = {
             "chip": None,
             "entry": self.id,
@@ -101,7 +116,9 @@ class User():
 
 
     def get_headers(self, referer):
-    # get the appropriate headers for making a request
+        '''
+        Get the appropriate headers for making a request
+        '''
         headers = {
             "Host": "fantasy.premierleague.com",
             "Content-Type": "application/json",
@@ -114,17 +131,20 @@ class User():
 
 
     def transfer(self, players_out, players_in, max_hit=12, wildcard=False):
-        # method for making transfers for the logged in player
+        '''
+        Method for making transfers for the logged in User
+        '''
         
         # cover various error cases
-        if not self.is_logged_in:
-            raise Exception("User is not logged in")
+        assert self.is_logged_in, "You must be logged in to make a transfer"
 
-        if not players_out or not players_in:
-            raise Exception("You must transfer at least one player in and one player out")
+        assert players_out and players_in, "You must transfer at least one player in and one player out"
+        # if not players_out or not players_in:
+        #     raise Exception("You must transfer at least one player in and one player out")
 
-        if len(players_out) != len(players_in):
-            raise Exception("You must transfer the same amount of players in and out")
+        assert len(players_out) == len(players_in), "You must transfer the same amount of players in and out"
+        # if len(players_out) != len(players_in):
+        #     raise Exception("You must transfer the same amount of players in and out")
 
         # get the player's own team
         team = self.get_team()
@@ -165,7 +185,7 @@ class User():
 
         with self.session.post(request_url, data=json.dumps(payload), headers=headers) as response:
             if response.status_code == 201:
-                print('Status code 201 (created) aw yiss')
+                print('League created. Checking for league in User leagues...')
                 try:
                     data = json.loads(response.text)
                     return ClassicLeague(data['id'], self.session)
@@ -200,7 +220,9 @@ class User():
             return response
 
 class ClassicLeague():
-    # A class based on a classic league
+    '''
+    A class representing a classic league in fpl
+    '''
 
     def __init__(self, id, session, fulldata=True):
         self.session = session
@@ -260,7 +282,9 @@ class ClassicLeague():
             return standings_list
 
 class PLTeam():
-    # A class for the premier league teams (Arsenal, Aston Villa etc.)
+    '''
+    A class for the premier league teams (Arsenal, Aston Villa etc.)
+    '''
 
     def __init__(self, data, session):
         self.data = data
