@@ -115,10 +115,9 @@ class FPL():
             players.append(new_player)
         self.players = players
         print("Got players")
-        return players
 
-    def get_plplayer_by_id(self, players, id):
-        return next(player for player in players if player.id == id)
+    def get_plplayer_by_id(self, id):
+        return next(player for player in self.players if player.id == id)
 
     def get_plplayer_by_name(self, name):
         players = self.players
