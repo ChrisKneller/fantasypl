@@ -12,7 +12,7 @@ git clone https://github.com/ChrisKneller/fantasypl.git
 
 Try out some basic commands.
 
-```python
+```bash
 >>> from fantasypl import FPL, User, ClassicLeague 
 >>> fpl = FPL()
 >>> fpl.login()
